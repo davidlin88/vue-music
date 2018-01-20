@@ -71,7 +71,7 @@ export default{
         width += sliderWidth
       }
 
-      // 增加2个slider宽度,为无缝滚动服务
+      // ???
       if (this.loop && !isResize) {
         width += 2 * sliderWidth
       }
@@ -81,21 +81,19 @@ export default{
       this.slider = new BScroll(this.$refs.slider, {
         scrollX: true,
         scrollY: false,
-        momentum: false, // 惯性
-        snap: {
-          loop: this.loop, // 循环
-          threshold: 0.3, // // 滚动距离超过宽度/高度的 30% 时切换图片
-          speed: 400 // 轮播间隔
-        },
+        momentum: false,
+        snap: true,
+        snapLoop: this.loop, // 循环
+        snapThreshold: 0.3,
+        snapSpeed: 400,
         click: true
       })
 
       this.slider.on('scrollEnd', () => {
         let pageIndex = this.slider.getCurrentPage().pageX
-        // bs老版本有,新版本去掉
-        // if (this.loop) {
-        //   pageIndex -= 1
-        // }
+        if (this.loop) {
+          pageIndex -= 1
+        }
         this.currentPageIndex = pageIndex
 
         if (this.autoPlay) {
@@ -105,8 +103,7 @@ export default{
       })
     },
     _initDots() {
-      // this.dots = new Array(this.children.length)
-      this.dots = new Array(this.children.length - 2)
+      this.dots = new Array(this.children.length)
     },
     _play() {
       let pageIndex = this.currentPageIndex + 1
@@ -117,11 +114,6 @@ export default{
         this.slider.goToPage(pageIndex, 0, 400)
       }, this.interval)
     }
-  },
-  // 什么时候会destroyed?
-  destroyed() {
-    console.log('destroyed --> 清理定时器')
-    clearTimeout(this.timer) // 有利于内存的释放
   }
 }
 </script>
