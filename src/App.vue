@@ -20,5 +20,4 @@ export default {
 </script>
 
 <style lang="stylus">
-@import '~common/stylus/reset'
 </style>
