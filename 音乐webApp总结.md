@@ -63,6 +63,10 @@ Vue.use(VueLazyLoad, {
 ```
 3. 组件中调用:`<img v-lazy="item.url"> // 原为:src="item.url"`
 
+### 控制loading组件的显隐
+用`v-show="!discList.length"`而非`v-show="!discList"`,因data中定义了discList,即使是无元素,也不是undefined
+### 在父组件中执行子组件的事件
+可直接通过形如`this.$refs.listview.refresh()`调用
 ### vue2.x 通过后端接口代理从api获取数据
 1. `webpack.dev.conf.js`中创建接口:
 ```

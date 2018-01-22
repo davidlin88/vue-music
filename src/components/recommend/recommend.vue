@@ -2,6 +2,7 @@
   <div class="recommend">
     <scroll ref="scroll" class="recommend-content">
       <div>
+        <!-- 轮播图 -->
         <div class="slider-wrapper" v-if="recommends.length">
           <slider>
             <div v-for="(item, index) in recommends" :key="index">
@@ -26,6 +27,10 @@
           </ul>
         </div>
       </div>
+      <!-- loading -->
+      <div class="loading-container" v-show="!discList.length">
+        <loading></loading>
+      </div>
     </scroll>
   </div>
 </template>
@@ -35,6 +40,7 @@ import Scroll from 'base/scroll/scroll'
 import {getRecommend, getDiscList} from 'api/recommend'
 import {ERR_OK} from 'api/config'
 import Slider from 'base/slider/slider'
+import Loading from 'base/loading/loading'
 
 export default{
   data() {
@@ -45,7 +51,8 @@ export default{
   },
   components: {
     Slider,
-    Scroll
+    Scroll,
+    Loading
   },
   created() {
     this._getRecommend()
@@ -125,4 +132,9 @@ export default{
             font-weight 600
           .desc
             color $color-text
+    .loading-container
+      position absolute
+      width 100%
+      top 50%
+      transform translateY(-50%)
 </style>

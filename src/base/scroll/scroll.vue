@@ -8,7 +8,7 @@
 import BScroll from 'better-scroll'
 
 export default {
-  porps: {
+  props: {
     probeType: {
       type: Number,
       default: 1
@@ -20,13 +20,14 @@ export default {
     data: {
       type: Array,
       default: null
+    },
+    // 是否让scroll监听滚动事件 --> 减少消耗
+    listenScroll: {
+      type: Boolean,
+      default: false
     }
   },
   mounted() {
-    // setTimeout(() => {
-    //   console.log('创建BS对象')
-    //   this._initScroll()
-    // }, 20)
     this.$nextTick(() => {
       console.log('创建bs对象')
       this._initScroll()
@@ -41,6 +42,13 @@ export default {
         probeType: this.probeType,
         click: this.click
       })
+      if (this.listenScroll) {
+        let me = this // 保留vue实例
+        this.scroll.on('scroll', (pos) => {
+          // 派发scroll事件
+          me.$emit('scroll', pos) // 此处若用this,则会指向scroll
+        })
+      }
     },
     enable() {
       this.scroll && this.scroll.enable()
@@ -50,6 +58,12 @@ export default {
     },
     refresh() {
       this.scroll && this.scroll.refresh()
+    },
+    scrollTo() {
+      this.scroll && this.scroll.scrollTo.apply(this.scroll, arguments)
+    },
+    scrollToElement() {
+      this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments)
     }
   }
   // watch: {
