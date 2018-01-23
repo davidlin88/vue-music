@@ -67,6 +67,12 @@ Vue.use(VueLazyLoad, {
 用`v-show="!discList.length"`而非`v-show="!discList"`,因data中定义了discList,即使是无元素,也不是undefined
 ### 在父组件中执行子组件的事件
 可直接通过形如`this.$refs.listview.refresh()`调用
+### vue-router的编程跳转(动态的变量路由地址)
+```
+this.$router.push({
+  path: `/singer/${singer.id}`
+})
+```
 ### vue2.x 通过后端接口代理从api获取数据
 1. `webpack.dev.conf.js`中创建接口:
 ```

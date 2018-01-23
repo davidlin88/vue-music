@@ -1,6 +1,7 @@
 <template>
   <div class="singer">
-    <list-view :data="singerList"></list-view>
+    <list-view @select="selectSinger" :data="singerList"></list-view>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -9,6 +10,7 @@ import {getSingerList} from 'api/singer'
 import {ERR_OK} from 'api/config'
 import Singer from 'common/js/singer'
 import ListView from 'base/listview/listview'
+import {mapMutations} from 'vuex'
 
 const HOT_NAME = '热门'
 const HOT_SINGER_LEN = 10
@@ -23,16 +25,24 @@ export default{
     this._getSinger()
   },
   methods: {
+    selectSinger(singer) {
+      // $router是vue-router的编程跳转接口 --> 执行一个路由跳转
+      this.$router.push({
+        path: `/singer/${singer.id}`
+      })
+      // 往state里写singer的值
+      this.setSinger(singer)
+    },
     _getSinger() {
       getSingerList().then((res) => {
         if (res.code === ERR_OK) {
-          this.singerList = this._normalizeSinger(res.data.list)
+          this.singerList = this._normallizeSinger(res.data.list)
         } else {
           console.log('没,没有歌手')
         }
       })
     },
-    _normalizeSinger(list) {
+    _normallizeSinger(list) {
       let map = {
         hot: {
           title: HOT_NAME,
@@ -75,7 +85,10 @@ export default{
       })
       // 按需求 --> 顺序返回hot数组和首字母数字
       return hot.concat(rest)
-    }
+    },
+    ...mapMutations({
+      setSinger: 'SET_SINGER' // 方法映射
+    })
   },
   components: {
     ListView
