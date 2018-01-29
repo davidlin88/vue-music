@@ -36,13 +36,13 @@ export default{
     _getSinger() {
       getSingerList().then((res) => {
         if (res.code === ERR_OK) {
-          this.singerList = this._normallizeSinger(res.data.list)
+          this.singerList = this._normalizeSinger(res.data.list)
         } else {
           console.log('没,没有歌手')
         }
       })
     },
-    _normallizeSinger(list) {
+    _normalizeSinger(list) {
       let map = {
         hot: {
           title: HOT_NAME,

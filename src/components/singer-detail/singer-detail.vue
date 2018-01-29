@@ -1,24 +1,29 @@
 <template>
   <transition name="slide">
-    <div class="singer-detail">
-<!--       <musiclist :title="title" :bg-image="bgImage" :songs="songs"></musiclist> -->
-    </div>
+    <music-list :title="title" :bg-image="bgImage" :songs="songs"></music-list>
   </transition>
 </template>
 
 <script>
-// import MusicList from 'components/music-list/music-list'
+import MusicList from 'components/music-list/music-list'
 import {getSingerDetail} from 'api/singer'
 import {ERR_OK} from 'api/config'
 import {mapGetters} from 'vuex'
+import {createSong} from 'common/js/song'
 
 export default {
   data() {
     return {
-      songs: {}
+      songs: []
     }
   },
   computed: {
+    title() {
+      return this.singer.name
+    },
+    bgImage() {
+      return this.singer.avatar
+    },
     // 从state里取singer数据
     ...mapGetters([
       'singer'
@@ -28,20 +33,15 @@ export default {
     this._getDetail()
   },
   methods: {
-    _normallizeSongs(data) {
-      let a = {}
-      a.name = data.singer_name
-      let list = data.list
-      let songnames = []
-      let albumnames = []
-      for (var i = 0; i < list.length; i++) {
-        songnames[i] = list[i].musicData.songname
-        albumnames[i] = list[i].musicData.albumname
-        console.log(i)
-      }
-      a.songnames = songnames
-      a.albumnames = albumnames
-      return a
+    _normalizeSongs(list) {
+      let ret = [] // 定义返回值
+      list.forEach((item) => {
+        let {musicData} = item // 解构
+        if (musicData.songid && musicData.albummid) {
+          ret.push(createSong(musicData))
+        }
+      })
+      return ret
     },
     _getDetail() {
       // 没取到数据(如用户刷新),则跳回歌手页
@@ -51,28 +51,22 @@ export default {
       }
       getSingerDetail(this.singer.id).then((res) => {
         if (res.code === ERR_OK) {
-          this.songs = this._normallizeSongs(res.data)
+          this.songs = this._normalizeSongs(res.data.list)
           console.log(this.songs)
         } else {
           console.log('没,没有歌曲')
         }
       })
     }
+  },
+  components: {
+    MusicList
   }
 }
 </script>
 
 <style lang="stylus">
 @import '~common/stylus/variable'
-
-.singer-detail
-  position fixed
-  z-index 100
-  top 0
-  left 0
-  right 0
-  bottom 0
-  background-color $color-background
 .slide-enter-active, .slide-leave-active
   transition all .3s
 .slide-enter, .slide-leave-to

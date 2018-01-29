@@ -11,7 +11,7 @@ export default {
   props: {
     probeType: {
       type: Number,
-      default: 1
+      default: 1 // 滚动派发scroll事件,会截流(?)
     },
     click: {
       type: Boolean,
@@ -66,18 +66,5 @@ export default {
       this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments)
     }
   }
-  // watch: {
-  //   // data() {
-  //   //   setTimeout(() => {
-  //   //     this.refresh()
-  //   //   }, 20)
-  //   // }
-  //   data () {
-  //     this.$nextTick(() => {
-  //       console.log('refresh bs对象')
-  //       this.refresh()
-  //     })
-  //   }
-  // }
 }
 </script>

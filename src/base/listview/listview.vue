@@ -62,7 +62,7 @@ export default {
     this.touch = {} // 用于在touchstart和touchmove间传递参数
     this.listenScroll = true
     this.listHeight = []
-    this.probeType = 3 // 跟随惯性变化
+    this.probeType = 3 // 实时派发scroll事件,swipe下同样
   },
   data() {
     return {
@@ -87,7 +87,7 @@ export default {
       if (this.scrollY > 0) {
         return ''
       }
-      return this.data[this.currentIndex] ? this.data[this.currentIndex].title : '123'
+      return this.data[this.currentIndex] ? this.data[this.currentIndex].title : ''
     }
   },
   methods: {

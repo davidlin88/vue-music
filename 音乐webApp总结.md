@@ -26,6 +26,8 @@ new Vue({
   render: h => h(App)
 })
 ```
+### 阻止点击事件冒泡
+`@click.stop="clickEvent"`
 ### router-link的类
 router-link跳转后,点击的链接会激活一个名为`.router-link-active`的类,可借此进行css设计
 ### encodeURIComponent() 
@@ -73,6 +75,24 @@ this.$router.push({
   path: `/singer/${singer.id}`
 })
 ```
+### CSS3 animation动画的暂停
+```
+div {
+  animation-play-state: paused;
+  -webkit-animation-play-state: paused; /* Safari 和 Chrome */
+} // 动画的css代码要同时赋予
+```
+### svg circle 图形
+```
+// viewbox 视口的区域 0,0到100,100
+<svg :width="radius" :height="radius" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  // r:半径 cx/cy:圆心坐标
+  <circle class="progress-background" r="50" cx="50" cy="50" fill="transparent" />
+  // stoke-dasharray:描边距离(总长) stroke-dashoffset:描边偏移(显示长度)
+  <circle class="progress-bar" r="50" cx="50" cy="50" fill="transparent" stroke-dasharray="100" />
+</svg>
+```
+
 ### vue2.x 通过后端接口代理从api获取数据
 1. `webpack.dev.conf.js`中创建接口:
 ```

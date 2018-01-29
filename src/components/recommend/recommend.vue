@@ -13,7 +13,7 @@
           </slider>
         </div>
         <div class="recommend-list">
-          <h1 class="list-title">热门歌单推荐</h1>
+          <h1 class="list-title" @click="printStyle">热门歌单推荐</h1>
           <ul>
             <li v-for="(item, index) in discList" class="item" :key=index>
               <div class="icon">
@@ -59,6 +59,9 @@ export default{
     this._getDiscList()
   },
   methods: {
+    printStyle(e) {
+      console.log(e.target.style)
+    },
     _getRecommend() {
       getRecommend().then((res) => {
         if (res.code === ERR_OK) {
