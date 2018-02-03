@@ -38,13 +38,14 @@ export default{
 
   .progress-circle
     position relative
+    font-size 0
     circle
       stroke-width 8px
       transform-origin center
       &.progress-background
-        transform scale(0.9)
+        transform scale(0.8)
         stroke $color-theme-l
       &.progress-bar
-        transform scale(0.9) rotate(-90deg) // 修改圆的起始位置
+        transform scale(0.8) rotate(-90deg) // 修改圆的起始位置
         stroke $color-theme
 </style>

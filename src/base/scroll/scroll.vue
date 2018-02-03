@@ -29,7 +29,6 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      console.log('创建bs对象')
       this._initScroll()
     })
   },

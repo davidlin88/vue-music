@@ -1,44 +1,118 @@
 <template>
-  <div>
-    <div v-for='(checkb, index) in checkboxData' :key="index">
-     <input type='checkbox' name='checkboxinput' class='input-checkbox' v-model="check">{{checkb.value}}
+  <scroll class="rank" ref="rank">
+    <div class="toplist">
+      <ul>
+        <li class="item" v-for="(item, index) in topList" :key="index" @click="selectItem(item)">
+          <div class="icon">
+            <img width="100" height="100" v-lazy="item.picUrl">
+          </div>
+          <ul class="songlist">
+            <li class="song" v-for="(song, i) in item.songList" :key="i">
+              <span>{{i + 1}}</span>
+              <span>{{song.songname}}-{{song.singername}}</span>
+            </li>
+          </ul>
+        </li>
+      </ul>
     </div>
-     <button @click="click">123</button>
-  </div>
+    <router-view></router-view>
+  </scroll>
 </template>
 
 <script>
-/* eslint-disable */
+import {getToplist} from 'api/rank'
+import {ERR_OK} from 'api/config'
+import Scroll from 'base/scroll/scroll'
+import {playlistMixin} from 'common/js/mixin'
+import {mapMutations} from 'vuex'
+
 export default {
-  methods:{
-    click() {
-      console.log(this.check)
-      this.check = true
+  mixins: [playlistMixin],
+  data() {
+    return {
+      topList: []
     }
-},
-watch: {//深度 watcher
-},
-data () {
-  return {
-    checkboxData:[{
-      id:'1',
-      value:'苹果'
-    },{
-      id:'2',
-      value:'荔枝'
-    },{
-      id:'3',
-      value:'香蕉'
-    },{
-      id:'4',
-      value:'火龙果'
-    }],
-    check: false
+  },
+  created() {
+    this._getToplist()
+  },
+  methods: {
+    selectItem(item) {
+      this.$router.push({
+        path: `/rank/${item.id}`
+      })
+      this._setRankItem(item)
+    },
+    handlePlaylist(playlist) {
+      const bottom = playlist.length > 0 ? '60px' : ''
+      this.$refs.rank.$el.style.bottom = bottom
+      this.$refs.rank.refresh()
+    },
+    _setRankItem(item) {
+      let {id, topTitle} = item
+      let ret = {id, topTitle}
+      this.setRankItem(ret)
+    },
+    _getToplist() {
+      getToplist().then((res) => {
+        if (res.code === ERR_OK) {
+          this.topList = res.data.topList
+        } else {
+          console.log('没,没有排行')
+        }
+      })
+    },
+    ...mapMutations({
+      setRankItem: 'SET_RANKITEM'
+    })
+  },
+  components: {
+    Scroll
   }
-}
 }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
+  @import '~common/stylus/variable'
+  @import '~common/stylus/mixin'
 
+  .rank
+    position fixed
+    width 100%
+    top 88px
+    overflow hidden
+    bottom 0
+    .toplist
+      height 100
+      overflow hidden
+      .item
+        display flex
+        margin 0 20px
+        padding-top 20px
+        height 100px
+        &:last-child
+          padding-bottom 20px
+        .icon
+          flex 0 0 100px
+          width 100px
+          height 100px
+        .songlist
+          flex 1
+          display flex
+          flex-direction column
+          justify-content center
+          padding 0 20px
+          height 100px
+          overflow hidden
+          background-color $color-highlight-background
+          color $color-text
+          font-size $font-size-small
+          .song
+            no-wrap()
+            line-height 26px
+      .loading-container
+        position absolute
+        width 100%
+        top 50%
+        transform translate3dY(-50%)
 </style>

@@ -92,7 +92,26 @@ div {
   <circle class="progress-bar" r="50" cx="50" cy="50" fill="transparent" stroke-dasharray="100" />
 </svg>
 ```
-
+### 数组的副本
+```
+let arr = [1, 2, 3]
+let newArr = arr // 这样赋值不能创建新的数组,只是对原数组的引用
+for(let i = 0 ; i < newArr.length ; i++) {
+  newArr[i] += 1
+}
+console.log(newArr) // 2,3,4
+console.log(arr) // 2,3,4
+```
+创建数组副本,用`let _arr = arr.slice()`
+### $el的使用
+使用`this.$ref.xxx`时,若取的对象是组件,而想取对应的根元素,就加个$el,即如`this.$refs.xxx.$el.style.bottom = '60px'`
+### 解构对象的应用
+```
+ let {songlist, topinfo} = res // 解构: res有很多属性,提取特定属性,赋给其他变量
+ let ret = {topinfo, songlist}
+```
+### ios系统测试svg图标位置误差(iphone se)
+ios系统上测试时发现mini播放器播放图标的内外圈不对齐,将外容器添加`font-size: 0`解决
 ### vue2.x 通过后端接口代理从api获取数据
 1. `webpack.dev.conf.js`中创建接口:
 ```

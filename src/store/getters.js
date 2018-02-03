@@ -13,6 +13,10 @@ export const mode = state => state.mode
 
 export const currentIndex = state => state.currentIndex
 
+export const disc = state => state.disc
+
+export const rankItem = state => state.rankItem
+
 // getter可充当计算属性
 export const currentSong = (state) => {
   return state.playlist[state.currentIndex] || {}

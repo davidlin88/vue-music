@@ -15,13 +15,19 @@ const mutations = {
     state.playlist = list
   },
   [types.SET_SEQUENCE_LIST](state, list) {
-    state.sequence = list
+    state.sequenceList = list
   },
   [types.SET_PLAY_MODE](state, mode) {
     state.mode = mode
   },
   [types.SET_CURRENT_INDEX](state, index) {
     state.currentIndex = index
+  },
+  [types.SET_DISC](state, disc) {
+    state.disc = disc
+  },
+  [types.SET_RANKITEM](state, rankItem) {
+    state.rankItem = rankItem
   }
 }
 

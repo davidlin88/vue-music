@@ -91,6 +91,9 @@ export default {
     }
   },
   methods: {
+    refresh() {
+      this.$refs.listview.refresh()
+    },
     // 向外部派发select事件,参数是被点击的item元素
     selectItem(item) {
       this.$emit('select', item)
@@ -153,7 +156,6 @@ export default {
         if (-newY >= height1 && -newY < height2) {
           this.currentIndex = i
           this.diff = height2 + newY
-          console.log('diff', this.diff)
           return
         }
       }

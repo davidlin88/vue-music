@@ -6,7 +6,7 @@
     <h1 class="title">{{title}}</h1>
     <div class="bg-image" :style="bgStyle" ref="bgImage">
       <div class="play-wrapper">
-        <div class="play" v-show="songs.length" ref="playBtn">
+        <div class="play" v-show="songs.length" ref="playBtn" @click="random">
           <i class="icon-play"></i>
           <span class="text">随机播放全部</span>
         </div>
@@ -17,7 +17,7 @@
     <div class="bg-layer" ref="layer"></div>
     <scroll @scroll="scroll" class="list" ref="list" :probe-type="probeType" :listen-scroll="listenScroll">
       <div class="song-list-wrapper">
-        <song-list @select="selectItem" :songs="songs"></song-list>
+        <song-list @select="selectItem" :songs="songs" :rank="rank"></song-list>
       </div>
       <div class="loading-container" v-show="!songs.length">
         <loading></loading>
@@ -32,13 +32,19 @@ import Scroll from 'base/scroll/scroll'
 import {prefixStyle} from 'common/js/dom'
 import Loading from 'base/loading/loading'
 import {mapActions} from 'vuex'
+import {playlistMixin} from 'common/js/mixin'
 
 const RESERVED_HEIGHT = 40
 const transform = prefixStyle('transform')
 const backdrop = prefixStyle('backdrop-filter')
 
 export default {
+  mixins: [playlistMixin], // 插入mixin
   props: {
+    rank: {
+      type: Boolean,
+      default: false
+    },
     bgImage: {
       type: String,
       default: ''
@@ -107,6 +113,17 @@ export default {
     this.listenScroll = true
   },
   methods: {
+    // 处理有迷你播放器时,scroll高度不全的情况
+    handlePlaylist(playlist) {
+      const bottom = playlist.length > 0 ? '60px' : ''
+      this.$refs.list.$el.style.bottom = bottom
+      this.$refs.list.refresh()
+    },
+    random() {
+      this.randomPlay({
+        list: this.songs
+      })
+    },
     selectItem(item, index) {
       this.selectPlay({
         list: this.songs,
@@ -122,7 +139,8 @@ export default {
     },
     // 调用actions的方法
     ...mapActions([
-      'selectPlay'
+      'selectPlay',
+      'randomPlay'
     ])
   },
   components: {
@@ -211,6 +229,7 @@ export default {
       top 0
       bottom 0
       width 100%
+      background-color $color-background-g
       .song-list-wrapper
         padding 20px 30px
         background-color $color-background-g

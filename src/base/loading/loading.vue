@@ -17,6 +17,8 @@ export default {
 </script>
 
 <style lang="stylus">
+  @import '~common/stylus/variable'
+
   .loading
     width 100%
     text-align center

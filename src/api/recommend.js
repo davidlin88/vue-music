@@ -33,5 +33,36 @@ export function getDiscList() {
     params: data
   }).then((res) => {
     return Promise.resolve(res.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+}
+
+export function getDisc(dissTid) {
+  const url = '/api/getDisc'
+
+  const data = Object.assign({}, commonParams, {
+    type: 1,
+    platform: 'yqq',
+    hostUin: 0,
+    sin: 0,
+    ein: 29,
+    sortId: 5,
+    needNewCode: 0,
+    categoryId: 10000000,
+    rnd: Math.random(),
+    format: 'json',
+    disstid: dissTid,
+    json: 1,
+    utf8: 1,
+    onlysong: 0
+  })
+
+  return axios.get(url, {
+    params: data
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  }).catch((e) => {
+    console.log(e)
   })
 }

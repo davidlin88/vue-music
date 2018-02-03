@@ -2,6 +2,9 @@
   <div class="song-list">
     <ul>
       <li @click="selectItem(song, index)" class="item" v-for="(song, index) in songs" :key="index">
+        <div class="rank" v-show="rank">
+          <span :class="getRankCls(index)" v-text="getRankText(index)"></span>
+        </div>
         <div class="content">
           <h2 class="name">{{song.name}}</h2>
           <p class="desc">{{getDesc(song)}}</p>
@@ -14,12 +17,28 @@
 <script>
 export default {
   props: {
+    rank: {
+      type: Boolean,
+      default: false
+    },
     songs: {
       type: Array,
       default: () => []
     }
   },
   methods: {
+    getRankCls(index) {
+      if (index <= 2) {
+        return `icon icon${index}`
+      } else {
+        return 'text'
+      }
+    },
+    getRankText(index) {
+      if (index > 2) {
+        return index + 1
+      }
+    },
     // 派发歌曲的点击事件
     selectItem(song, index) {
       this.$emit('select', song, index)

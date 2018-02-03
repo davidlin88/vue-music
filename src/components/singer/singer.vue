@@ -1,6 +1,6 @@
 <template>
-  <div class="singer">
-    <list-view @select="selectSinger" :data="singerList"></list-view>
+  <div class="singer" ref="singer">
+    <list-view @select="selectSinger" :data="singerList" ref="list"></list-view>
     <router-view></router-view>
   </div>
 </template>
@@ -11,11 +11,13 @@ import {ERR_OK} from 'api/config'
 import Singer from 'common/js/singer'
 import ListView from 'base/listview/listview'
 import {mapMutations} from 'vuex'
+import {playlistMixin} from 'common/js/mixin'
 
 const HOT_NAME = '热门'
 const HOT_SINGER_LEN = 10
 
 export default{
+  mixins: [playlistMixin],
   data() {
     return {
       singerList: []
@@ -25,6 +27,12 @@ export default{
     this._getSinger()
   },
   methods: {
+    // 处理有迷你播放器时,scroll高度不全的情况
+    handlePlaylist(playlist) {
+      const bottom = playlist.length > 0 ? '60px' : ''
+      this.$refs.singer.style.bottom = bottom
+      this.$refs.list.refresh()
+    },
     selectSinger(singer) {
       // $router是vue-router的编程跳转接口 --> 执行一个路由跳转
       this.$router.push({

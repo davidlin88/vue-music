@@ -1,5 +1,5 @@
 <template>
-  <div class="recommend">
+  <div class="recommend" ref="recommends">
     <scroll ref="scroll" class="recommend-content">
       <div>
         <!-- 轮播图 -->
@@ -13,9 +13,9 @@
           </slider>
         </div>
         <div class="recommend-list">
-          <h1 class="list-title" @click="printStyle">热门歌单推荐</h1>
+          <h1 class="list-title" @click="change">热门歌单推荐</h1>
           <ul>
-            <li v-for="(item, index) in discList" class="item" :key=index>
+            <li v-for="(item, index) in discList" class="item" :key=index @click="selectItem(item)">
               <div class="icon">
                 <img v-lazy="item.imgurl" width="60" height="60">
               </div>
@@ -32,6 +32,7 @@
         <loading></loading>
       </div>
     </scroll>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -41,8 +42,11 @@ import {getRecommend, getDiscList} from 'api/recommend'
 import {ERR_OK} from 'api/config'
 import Slider from 'base/slider/slider'
 import Loading from 'base/loading/loading'
+import {playlistMixin} from 'common/js/mixin'
+import {mapMutations} from 'vuex'
 
 export default{
+  mixins: [playlistMixin],
   data() {
     return {
       recommends: [],
@@ -59,13 +63,29 @@ export default{
     this._getDiscList()
   },
   methods: {
-    printStyle(e) {
-      console.log(e.target.style)
+    change(e) {
+      if (e.target.className.indexOf('list-title') === 0) {
+        console.log(e.target.className.indexOf('list-title'))
+        e.target.className = 'active list-title'
+      } else {
+        e.target.className = 'list-title'
+      }
+    },
+    selectItem(item) {
+      this.$router.push({
+        path: `/recommend/${item.dissid}`
+      })
+      this.setDisc(item)
+    },
+    // 处理有迷你播放器时,scroll高度不全的情况
+    handlePlaylist(playlist) {
+      const bottom = playlist.length > 0 ? '60px' : ''
+      this.$refs.recommends.style.bottom = bottom
+      this.$refs.scroll.refresh()
     },
     _getRecommend() {
       getRecommend().then((res) => {
         if (res.code === ERR_OK) {
-          console.log('轮播:', res)
           this.recommends = res.data.slider
         } else {
           console.log('没,没有轮播')
@@ -75,13 +95,15 @@ export default{
     _getDiscList() {
       getDiscList().then((res) => {
         if (res.code === ERR_OK) {
-          console.log('推荐:', res)
           this.discList = res.data.list
         } else {
           console.log('没,没有推荐')
         }
       })
-    }
+    },
+    ...mapMutations({
+      setDisc: 'SET_DISC'
+    })
     // loadImage() {
     //   if (!this.checkLoading) {
     //     this.$refs.scroll.refresh()
