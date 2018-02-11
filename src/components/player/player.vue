@@ -27,8 +27,8 @@
         ref="cd">
           <div class="middle-l" ref="middleL">
             <div class="cd-wrapper" ref="cdWrapper">
-              <div class="cd" :class="cdCls">
-                <img class="image" :src="currentSong.image">
+              <div class="cd">
+                <img class="image" :src="currentSong.image" ref="img">
               </div>
             </div>
             <div class="playing-lyric-wrapper">
@@ -86,7 +86,7 @@
     <transition name="mini">
       <div class="mini-player" v-show="!fullScreen" @click="open">
         <div class="icon">
-          <img  :class="cdCls" height="40" width="40" :src="currentSong.image">
+          <img height="40" width="40" :src="currentSong.image">
         </div>
         <div class="text">
           <h2 class="name">{{currentSong.name}}</h2>
@@ -111,7 +111,7 @@
 import {mapGetters, mapMutations} from 'vuex'
 // 一个用js写css动画的插件
 import animations from 'create-keyframe-animation'
-import {prefixStyle} from 'common/js/dom'
+import {prefixStyle, addClass} from 'common/js/dom'
 import ProgressBar from 'base/progress-bar/progress-bar'
 import ProgressCircle from 'base/progress-circle/progress-circle'
 import {playMode} from 'common/js/config'
@@ -137,9 +137,6 @@ export default {
   computed: {
     iconMode() {
       return this.mode === playMode.sequence ? 'icon-sequence' : this.mode === playMode.loop ? 'icon-loop' : this.mode === playMode.random ? 'icon-random' : ''
-    },
-    cdCls() {
-      return this.playing ? 'play' : 'play pause'
     },
     playIcon() {
       return this.playing ? 'icon-pause' : 'icon-play'
@@ -179,7 +176,10 @@ export default {
       this.$refs.audio.play()
       if (this.currentLyric) {
         // Lyric自带的跳转,没参数时跳到开头
-        this.currentLyric.seek()
+        this.currentLyric.seek(0)
+      }
+      if (!this.playling) {
+        this.setPlayingState(true)
       }
     },
     next() {
@@ -198,7 +198,7 @@ export default {
         this.setCurrentIndex(index)
         // 若为暂停状态,设为播放状态
         if (!this.playing) {
-          this.togglePlaying(true)
+          this.togglePlaying()
         }
       }
 
@@ -208,13 +208,17 @@ export default {
       if (!this.songReady) {
         return
       }
-      let index = this.currentIndex - 1
-      if (index === -1) {
-        index = this.playlist.length - 1
-      }
-      this.setCurrentIndex(index)
-      if (!this.playing) {
-        this.togglePlaying(true)
+      if (this.playlist.length === 1) {
+        this.loop()
+      } else {
+        let index = this.currentIndex - 1
+        if (index === -1) {
+          index = this.playlist.length - 1
+        }
+        this.setCurrentIndex(index)
+        if (!this.playing) {
+          this.togglePlaying()
+        }
       }
       this.songReady = false
     },
@@ -432,6 +436,20 @@ export default {
       this.$nextTick(() => {
         newPlaying ? audio.play() : audio.pause()
       })
+      console.log(getComputedStyle(this.$refs.img).transform)
+      if (!this.playing) {
+        this._cdAnimation(this.$refs.cdWrapper, this.$refs.img)
+        this.$refs.img.classList.remove('play')
+      } else {
+        addClass(this.$refs.img, 'play')
+      }
+    },
+    _cdAnimation(container, img) {
+      const cTransform = getComputedStyle(container).transform
+      const iTransform = getComputedStyle(img).transform
+      container.style[transform] = cTransform === 'none'
+        ? iTransform
+        : iTransform.concat(' ', cTransform)
     },
     // 映射mutations的方法
     ...mapMutations({
@@ -551,10 +569,10 @@ export default {
               box-sizing border-box
               border 10px solid rgba(255,255,255,.1)
               border-radius 50%
-              &.play
+              .play
                 animation rotate 20s linear infinite
-              &.pause
-                animation-play-state paused // 暂停正在播放的动画
+              // &.pause
+              //   animation-play-state paused // 暂停正在播放的动画
               .image
                 position absolute
                 left 0
@@ -680,10 +698,11 @@ export default {
         padding 0 10px 0 20px
         img
           border-radius 50%
-          &.play
-            animation rotate 10s linear infinite
-          &.pause
-            animation-play-state paused
+          // transform叠加会莫名偏移,所以去除
+          // &.play
+          //   animation rotate 10s linear infinite
+          // &.pause
+          //   animation-play-state paused
       .text
         display flex
         flex-direction column

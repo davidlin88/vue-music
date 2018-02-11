@@ -82,6 +82,7 @@ export default {
     top 88px
     overflow hidden
     bottom 0
+    background-color $color-background-g
     .toplist
       height 100
       overflow hidden
@@ -90,6 +91,8 @@ export default {
         margin 0 20px
         padding-top 20px
         height 100px
+        &:first-child
+          padding-top 0
         &:last-child
           padding-bottom 20px
         .icon
@@ -104,9 +107,9 @@ export default {
           padding 0 20px
           height 100px
           overflow hidden
-          background-color $color-highlight-background
           color $color-text
           font-size $font-size-small
+          background-color $color-background
           .song
             no-wrap()
             line-height 26px

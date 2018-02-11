@@ -1,4 +1,5 @@
 import {playMode} from 'common/js/config'
+import {loadSearch} from 'common/js/cache'
 
 // 只存放最基础的数据
 const state = {
@@ -11,7 +12,7 @@ const state = {
   currentIndex: -1, // 当前索引
   disc: {},
   rankItem: {},
-  rankDetail: {}
+  searchHistory: loadSearch()
 }
 
 export default state

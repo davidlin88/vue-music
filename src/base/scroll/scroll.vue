@@ -25,6 +25,15 @@ export default {
     listenScroll: {
       type: Boolean,
       default: false
+    },
+    // 下拉刷新的flag
+    pullup: {
+      type: Boolean,
+      default: false
+    },
+    beforeScroll: {
+      type: Boolean,
+      default: false
     }
   },
   mounted() {
@@ -48,6 +57,18 @@ export default {
           me.$emit('scroll', pos) // 此处若用this,则会指向scroll
         })
       }
+      if (this.pullup) {
+        this.scroll.on('scrollEnd', () => {
+          if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
+            this.$emit('scrollToEnd')
+          }
+        })
+      }
+      if (this.beforeScroll) {
+        this.scroll.on('beforeScrollStart', () => {
+          this.$emit('beforeScroll')
+        })
+      }
     },
     enable() {
       this.scroll && this.scroll.enable()
@@ -63,6 +84,11 @@ export default {
     },
     scrollToElement() {
       this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments)
+    }
+  },
+  watch: {
+    data() {
+      this.refresh()
     }
   }
 }

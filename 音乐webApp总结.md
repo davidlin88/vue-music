@@ -112,6 +112,110 @@ console.log(arr) // 2,3,4
 ```
 ### ios系统测试svg图标位置误差(iphone se)
 ios系统上测试时发现mini播放器播放图标的内外圈不对齐,将外容器添加`font-size: 0`解决
+### ios系统audio不能播放的问题
+降级vue版本 `vue`和`vue-template-complier`写死到2.3.3(package.json里去掉^),再`npm i`
+### 搜索页跳歌手页动画难题
+在搜索页新增路由,而不是跳到歌手路由的子路由,这样主页的动画和歌手动画就不会干扰了
+### [Vue warn]Do not mutate vuex store state outside mutation handlers.
+不要在mutations之外修改state数据,如直接将state内的数组赋值再修改,应在赋值语句末尾添加`slice()`以返回新的数组
+### 单曲暂停切换歌词bug
+原因: getlyric插件的seek(跳转)方法自带播放歌词
+### 节流函数
+```
+export function debounce(func, delay) {
+  let timer
+
+  return function (...args) {
+    if (timer) {
+      console.log(timer)
+      clearTimeout(timer)
+    }
+    timer = setTimeout(() => {
+      func.apply(this, args)
+    }, delay)
+  }
+}
+```
+### 开始滚动时隐藏移动端的手机键盘
+1. scroll设props,初始化方法里添加监听beforeScrollStart,并派发beforeScroll事件到suggest组件:
+```
+if (this.beforeScroll) {
+  this.scroll.on('beforeScrollStart', () => {
+    this.$emit('beforeScroll')
+  })
+}
+```
+2. suggest组件将beforeScroll事件传给search组件
+```
+<scroll @beforeScroll="listScroll"></scroll>
+
+listScroll() {
+      this.$emit('listScroll')
+    },
+```
+3. search组件中触发search-box的input的blur事件(失去焦点以隐藏手机键盘)
+```
+<suggest @listScroll="blurInput">
+
+blurInput() {
+      this.$refs.searchBox.blur()
+    },
+```
+
+### 移动端ios的input获取焦点页面会放大的解决方法
+在index.html头部添加`<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">`
+
+### ios端专辑封面动画不能暂停
+transform叠加法:
+```
+// img:专辑图片 container:img的容器
+_cdAnimation(container, img) {
+  const cTransform = getComputedStyle(container).transform
+  const iTransform = getComputedStyle(img).transform
+  container.style[transform] = cTransform === 'none'
+  ? iTransform
+  : iTransform.concat(' ', cTransform)
+  },
+```
+### 设置和读取缓存 Storage
+1. 安装good-storage插件
+2. 读与写:
+```
+import storage from 'good-storage'
+
+const SEARCH_KEY = '__search__'
+const SEARCH_MAX_LENGTH = 15
+
+// compare:findindex传入的是function,所以不能直接传val
+function insertArray(arr, val, compare, maxLen) {
+  const index = arr.findIndex(compare)
+  if (index === 0) {
+    return
+  }
+  if (index > 0) {
+    arr.splice(index, 1)
+  }
+  arr.unshift(val) // 插入到数组最前
+  if (maxLen && arr.length > maxLen) {
+    arr.pop() // 删除末位元素
+  }
+}
+
+// 存储搜索历史
+export function saveSearch(query) {
+  let searches = storage.get(SEARCH_KEY, [])
+  insertArray(searches, query, (item) => {
+    return item === query
+  }, SEARCH_MAX_LENGTH)
+  storage.set(SEARCH_KEY, searches)
+  return searches
+}
+// 加载本地缓存的搜索历史
+export function loadSearch() {
+  return storage.get(SEARCH_KEY, [])
+}
+```
+
 ### vue2.x 通过后端接口代理从api获取数据
 1. `webpack.dev.conf.js`中创建接口:
 ```

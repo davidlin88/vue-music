@@ -17,6 +17,8 @@ export const disc = state => state.disc
 
 export const rankItem = state => state.rankItem
 
+export const searchHistory = state => state.searchHistory
+
 // getter可充当计算属性
 export const currentSong = (state) => {
   return state.playlist[state.currentIndex] || {}
