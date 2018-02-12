@@ -166,7 +166,6 @@ export default {
     diff(newVal) {
       // 间距小于title高度时,title高度同步变高
       let fixedTop = newVal < TITLE_HEIGHT ? newVal - TITLE_HEIGHT : 0
-      console.log(newVal)
       // fixedTop不变时,跳出计算
       if (this.fixedTop === fixedTop) {
         return

@@ -5,7 +5,8 @@
   @scrollToEnd="searchMore"
   :beforeScroll="beforeScroll"
   @beforeScroll="listScroll"
-  @data="result">
+  @data="result"
+  ref="scroll">
     <ul class="suggest-list">
       <li class="suggest-item" v-for="(item, index) in result" :key="index" @click="selectItem(item)">
         <div class="icon">
@@ -57,6 +58,9 @@ export default {
     }
   },
   methods: {
+    refresh() {
+      this.$refs.scroll.refresh()
+    },
     search() {
       this.hasMore = true
       search(this.query, this.page, this.showSinger, perpage).then((res) => {

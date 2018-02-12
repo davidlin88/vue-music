@@ -436,7 +436,6 @@ export default {
       this.$nextTick(() => {
         newPlaying ? audio.play() : audio.pause()
       })
-      console.log(getComputedStyle(this.$refs.img).transform)
       if (!this.playing) {
         this._cdAnimation(this.$refs.cdWrapper, this.$refs.img)
         this.$refs.img.classList.remove('play')
@@ -470,17 +469,17 @@ export default {
       if (this.currentLyric) {
         this.currentLyric.stop()
       }
-      // this.$nextTick(() => {
-      //   // html5 audio 标签自带的方法
-      //   this.$refs.audio.play()
-      //   this.getLyric()
-      // })
-      // 防止微信后台bug
-      setTimeout(() => {
+      this.$nextTick(() => {
         // html5 audio 标签自带的方法
         this.$refs.audio.play()
         this.getLyric()
-      }, 1000)
+      })
+      // 防止微信后台bug
+      // setTimeout(() => {
+      //   // html5 audio 标签自带的方法
+      //   this.$refs.audio.play()
+      //   this.getLyric()
+      // }, 1000)
     },
     playing(newPlaying) {
       this._toggleplay(newPlaying)
