@@ -109,12 +109,8 @@ export default{
       this.dots = new Array(this.children.length - 2)
     },
     _play() {
-      let pageIndex = this.currentPageIndex + 1
-      if (this.loop) {
-        pageIndex += 1
-      }
       this.timer = setTimeout(() => {
-        this.slider.goToPage(pageIndex, 0, 400)
+        this.slider.next(400)
       }, this.interval)
     }
   },
