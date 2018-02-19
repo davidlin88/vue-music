@@ -93,16 +93,18 @@ export default{
       })
     },
     _getDiscList() {
-      getDiscList().then((res) => {
-        if (res.code === ERR_OK) {
-          this.discList = res.data.list
-        }
-      }).catch(() => {
-        console.log('没,没有推荐,开始请求模拟数据...')
-        setTimeout(() => {
-          this.discList = require('../../../static/recommend.json').data.list
-        }, 2000)
-      })
+      getDiscList()
+        .then((res) => {
+          if (res.code === ERR_OK) {
+            this.discList = res.data.list
+          }
+        })
+        .catch(() => {
+          console.log('没,没有推荐,开始请求模拟数据...')
+          setTimeout(() => {
+            this.discList = require('../../../static/recommend.json').data.list
+          }, 2000)
+        })
     },
     ...mapMutations({
       setDisc: 'SET_DISC'

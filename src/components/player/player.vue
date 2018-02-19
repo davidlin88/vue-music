@@ -46,6 +46,9 @@
                 :key="index"
                 :class="{'current' : currentLineNum === index}">{{line.txt}}</p>
               </div>
+              <div v-else>
+                <p class="text">暂无歌词</p>
+              </div>
             </div>
           </scroll>
         </div>
@@ -131,7 +134,7 @@ export default {
       currentLyric: null,
       currentLineNum: 0,
       currentShow: 'cd',
-      playingLyric: ''
+      playingLyric: '暂无歌词'
     }
   },
   computed: {
@@ -345,11 +348,7 @@ export default {
       } else {
         this.$refs.lyricList.scrollTo(0, 0, 1000)
       }
-      if (txt) {
-        this.playingLyric = txt
-      } else {
-        this.playingLyric = '暂无歌词'
-      }
+      this.playingLyric = txt
     },
     middleTouchStart(e) {
       this.touch.initiated = true

@@ -216,6 +216,37 @@ export function loadSearch() {
 }
 ```
 
+### 模拟数据的简单应用
+在取得真实数据后,从接口复制到本地的json文件,在api请求时then后是真实数据,catch中从本地json中获取模拟数据:
+```
+_getDiscList() {
+  getDiscList()
+    .then((res) => {
+      if (res.code === ERR_OK) {
+        this.discList = res.data.list
+      }
+    })
+    .catch(() => {
+      console.log('没,没有推荐,开始请求模拟数据...')
+      setTimeout(() => {
+        this.discList = require('../../../static/recommend.json').data.list
+      }, 2000)
+    })
+},
+```
+
+### v-if和v-else的使用
+```
+<div v-if="currentLyric">
+  <p ref="lyricLine" class="text" :class="{'current': currentLineNum === index}" v-for="(line, index) in currentLyric.lines" :key="line.id">
+    {{line.txt}}
+  </p>
+</div>
+<div v-else> // v-else和v-if并列 else不用写条件
+  <p class="text">暂无歌词</p>
+</div>
+```
+
 ### vue2.x 通过后端接口代理从api获取数据
 1. `webpack.dev.conf.js`中创建接口:
 ```
