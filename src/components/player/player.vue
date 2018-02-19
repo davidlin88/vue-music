@@ -348,9 +348,7 @@ export default {
       } else {
         this.$refs.lyricList.scrollTo(0, 0, 1000)
       }
-      console.log(this.playingLyric)
       this.playingLyric = txt
-      console.log(this.playingLyric)
     },
     middleTouchStart(e) {
       this.touch.initiated = true
