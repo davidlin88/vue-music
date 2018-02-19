@@ -1,7 +1,4 @@
 # 仿QQ音乐 WebApp
-
-> vue.js music-webapp
-
 ## 介绍
 
 该项目来源[HuangYi](https://github.com/ustbhuangyi), 之前写过他的[eleApp](https://github.com/davidlin88/vue-ele),后来发现这个进阶项目-音乐 App,于是有了这个仓库
