@@ -247,6 +247,9 @@ _getDiscList() {
 </div>
 ```
 
+### Unexpected token g in JSON at position 0
+报错原因是json文件的应用方式有误,我遇到的问题原因是本地json文件格式有误,写成了`xxx: {xxx}`,应该是`{xxx}`
+
 ### vue2.x 通过后端接口代理从api获取数据
 1. `webpack.dev.conf.js`中创建接口:
 ```
