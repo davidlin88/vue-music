@@ -345,7 +345,11 @@ export default {
       } else {
         this.$refs.lyricList.scrollTo(0, 0, 1000)
       }
-      this.playingLyric = txt
+      if (txt) {
+        this.playingLyric = txt
+      } else {
+        this.playingLyric = '暂无歌词'
+      }
     },
     middleTouchStart(e) {
       this.touch.initiated = true

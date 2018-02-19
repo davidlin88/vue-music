@@ -96,9 +96,12 @@ export default{
       getDiscList().then((res) => {
         if (res.code === ERR_OK) {
           this.discList = res.data.list
-        } else {
-          console.log('没,没有推荐')
         }
+      }).catch(() => {
+        console.log('没,没有推荐,开始请求模拟数据...')
+        setTimeout(() => {
+          this.discList = require('../../../static/recommend.json').data.list
+        }, 2000)
       })
     },
     ...mapMutations({
