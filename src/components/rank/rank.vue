@@ -1,6 +1,6 @@
 <template>
-  <scroll class="rank" ref="rank">
-    <div class="toplist">
+  <div class="rank">
+    <scroll class="toplist" ref="rank">
       <ul>
         <li class="item" v-for="(item, index) in topList" :key="index" @click="selectItem(item)">
           <div class="icon">
@@ -14,9 +14,9 @@
           </ul>
         </li>
       </ul>
-    </div>
+    </scroll>
     <router-view></router-view>
-  </scroll>
+  </div>
 </template>
 
 <script>
@@ -80,11 +80,10 @@ export default {
     position fixed
     width 100%
     top 88px
-    overflow hidden
     bottom 0
     background-color $color-background-g
     .toplist
-      height 100
+      height 100%
       overflow hidden
       .item
         display flex

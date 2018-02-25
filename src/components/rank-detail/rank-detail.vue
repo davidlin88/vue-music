@@ -15,7 +15,6 @@ export default {
   data() {
     return {
       rank: true,
-      rankDetail: {},
       songs: []
     }
   },
@@ -67,7 +66,7 @@ export default {
 }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 @import '~common/stylus/variable'
 .slide-enter-active, .slide-leave-active
   transition all .3s

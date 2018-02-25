@@ -302,6 +302,10 @@ _getDiscList() {
 ### Unexpected token g in JSON at position 0
 报错原因是json文件的应用方式有误,我遇到的问题原因是本地json文件格式有误,写成了`xxx: {xxx}`,应该是`{xxx}`
 
+### 一个better-scroll的巨坑
+在pc端没异常,模拟手机调试也没问题,但在手机上测试时,rank-detail显示不全,会被tab和header遮住,几经探究发现:是div.rank的`overflow:hidden`引起的,rank-detail组件是div.rank的子元素,所以多出的部分会被隐藏,显示出来的效果就是看起来header和tab把rank-detail遮住了,并不是开始预想的z-index问题.
+解决方法:将div.rank的overflow属性去掉,类比没有出现问题的singer组件,将scroll组件再往下一个dom级别引入,overflow:hidden也往下写一个级别,使其和rank-detail的musci-list同级,这样就不会被遮住了,移动端测试也正常~!
+
 ### vue2.x 通过后端接口代理从api获取数据
 1. `webpack.dev.conf.js`中创建接口:
 ```
