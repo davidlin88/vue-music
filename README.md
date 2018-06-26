@@ -107,7 +107,7 @@ scroll组件的外层元素宽高应依据浏览器窗口进行定位(默认被�
 ### user-select: none
 设定后,用户不能选中文本
 ### 图片懒加载(提速,省流)
-1. 安装:`cnpm i vue-lazyload`
+1. 安装:`cnpm i vue-lazyload --save -dev`
 2. main.js中引入并使用:
 ```
 import VueLazyLoad from 'vue-lazyload'
